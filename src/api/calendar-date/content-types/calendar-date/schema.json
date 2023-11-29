@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "calendar_dates",
+  "info": {
+    "singularName": "calendar-date",
+    "pluralName": "calendar-dates",
+    "displayName": "CalendarDate",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "start": {
+      "type": "string"
+    },
+    "end": {
+      "type": "string"
+    },
+    "costumer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::costumer.costumer",
+      "inversedBy": "calendar_dates"
+    },
+    "filter_date": {
+      "type": "string"
+    }
+  }
+}
