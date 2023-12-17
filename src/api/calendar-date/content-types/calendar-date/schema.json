@@ -26,6 +26,9 @@
     },
     "filter_date": {
       "type": "string"
+    },
+    "total_price": {
+      "type": "biginteger"
     }
   }
 }

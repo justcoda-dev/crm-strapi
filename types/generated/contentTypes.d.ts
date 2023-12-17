@@ -697,6 +697,7 @@ export interface ApiCalendarDateCalendarDate extends Schema.CollectionType {
       'api::costumer.costumer'
     >;
     filter_date: Attribute.String;
+    total_price: Attribute.BigInteger;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -752,6 +753,38 @@ export interface ApiCostumerCostumer extends Schema.CollectionType {
   };
 }
 
+export interface ApiCurrentPriceCurrentPrice extends Schema.SingleType {
+  collectionName: 'current_prices';
+  info: {
+    singularName: 'current-price';
+    pluralName: 'current-prices';
+    displayName: 'CurrentPrice';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    weekdays_price: Attribute.BigInteger;
+    weekends_price: Attribute.BigInteger;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::current-price.current-price',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::current-price.current-price',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiSelectedDateSelectedDate extends Schema.SingleType {
   collectionName: 'selected_dates';
   info: {
@@ -800,6 +833,7 @@ declare module '@strapi/types' {
       'plugin::i18n.locale': PluginI18NLocale;
       'api::calendar-date.calendar-date': ApiCalendarDateCalendarDate;
       'api::costumer.costumer': ApiCostumerCostumer;
+      'api::current-price.current-price': ApiCurrentPriceCurrentPrice;
       'api::selected-date.selected-date': ApiSelectedDateSelectedDate;
     }
   }
