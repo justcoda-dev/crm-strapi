@@ -29,6 +29,27 @@
     },
     "total_price": {
       "type": "biginteger"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "calendar_dates"
+    },
+    "hotel": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::hotel.hotel",
+      "inversedBy": "calendar_dates"
+    },
+    "costumers_count": {
+      "type": "integer"
+    },
+    "hotel_room": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::hotel-room.hotel-room",
+      "inversedBy": "calendar_dates"
     }
   }
 }

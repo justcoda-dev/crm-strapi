@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_input_text_inputs",
+  "info": {
+    "displayName": "TextOption",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    },
+    "status": {
+      "type": "boolean"
+    },
+    "type": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    }
+  }
+}

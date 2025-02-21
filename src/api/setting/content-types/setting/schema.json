@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "settings",
+  "info": {
+    "singularName": "setting",
+    "pluralName": "settings",
+    "displayName": "Setting",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "component": {
+      "type": "dynamiczone",
+      "components": [
+        "input.checkbox-option",
+        "input.select-option",
+        "input.text-input"
+      ]
+    }
+  }
+}

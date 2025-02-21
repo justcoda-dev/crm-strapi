@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_input_checkbox_options",
+  "info": {
+    "displayName": "CheckboxOption",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "value": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "boolean"
+    },
+    "type": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    }
+  }
+}

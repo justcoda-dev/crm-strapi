@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_input_select_options",
+  "info": {
+    "displayName": "selectOption",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    },
+    "status": {
+      "type": "boolean"
+    },
+    "key": {
+      "type": "string"
+    }
+  }
+}

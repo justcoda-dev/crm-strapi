@@ -482,6 +482,50 @@ export interface PluginUploadFolder extends Schema.CollectionType {
   };
 }
 
+export interface PluginI18NLocale extends Schema.CollectionType {
+  collectionName: 'i18n_locale';
+  info: {
+    singularName: 'locale';
+    pluralName: 'locales';
+    collectionName: 'locales';
+    displayName: 'Locale';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    name: Attribute.String &
+      Attribute.SetMinMax<{
+        min: 1;
+        max: 50;
+      }>;
+    code: Attribute.String & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUsersPermissionsPermission
   extends Schema.CollectionType {
   collectionName: 'up_permissions';
@@ -587,7 +631,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     username: Attribute.String &
@@ -616,6 +659,26 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    costumers: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::costumer.costumer'
+    >;
+    calendar_dates: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::calendar-date.calendar-date'
+    >;
+    hotels: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'manyToMany',
+      'api::hotel.hotel'
+    >;
+    enterprise: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'manyToOne',
+      'api::enterprise.enterprise'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -626,50 +689,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'plugin::users-permissions.user',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface PluginI18NLocale extends Schema.CollectionType {
-  collectionName: 'i18n_locale';
-  info: {
-    singularName: 'locale';
-    pluralName: 'locales';
-    collectionName: 'locales';
-    displayName: 'Locale';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
-  };
-  attributes: {
-    name: Attribute.String &
-      Attribute.SetMinMax<{
-        min: 1;
-        max: 50;
-      }>;
-    code: Attribute.String & Attribute.Unique;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'plugin::i18n.locale',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'plugin::i18n.locale',
       'oneToOne',
       'admin::user'
     > &
@@ -698,6 +717,22 @@ export interface ApiCalendarDateCalendarDate extends Schema.CollectionType {
     >;
     filter_date: Attribute.String;
     total_price: Attribute.BigInteger;
+    user: Attribute.Relation<
+      'api::calendar-date.calendar-date',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    hotel: Attribute.Relation<
+      'api::calendar-date.calendar-date',
+      'manyToOne',
+      'api::hotel.hotel'
+    >;
+    costumers_count: Attribute.Integer;
+    hotel_room: Attribute.Relation<
+      'api::calendar-date.calendar-date',
+      'manyToOne',
+      'api::hotel-room.hotel-room'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -735,6 +770,23 @@ export interface ApiCostumerCostumer extends Schema.CollectionType {
       'oneToMany',
       'api::calendar-date.calendar-date'
     >;
+    address: Attribute.String;
+    email: Attribute.String;
+    user: Attribute.Relation<
+      'api::costumer.costumer',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    hotels: Attribute.Relation<
+      'api::costumer.costumer',
+      'manyToMany',
+      'api::hotel.hotel'
+    >;
+    hotel_rooms: Attribute.Relation<
+      'api::costumer.costumer',
+      'manyToMany',
+      'api::hotel-room.hotel-room'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -753,31 +805,44 @@ export interface ApiCostumerCostumer extends Schema.CollectionType {
   };
 }
 
-export interface ApiCurrentPriceCurrentPrice extends Schema.SingleType {
-  collectionName: 'current_prices';
+export interface ApiEnterpriseEnterprise extends Schema.CollectionType {
+  collectionName: 'enterprises';
   info: {
-    singularName: 'current-price';
-    pluralName: 'current-prices';
-    displayName: 'CurrentPrice';
+    singularName: 'enterprise';
+    pluralName: 'enterprises';
+    displayName: 'Enterprise';
     description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    weekdays_price: Attribute.BigInteger;
-    weekends_price: Attribute.BigInteger;
+    name: Attribute.String;
+    address: Attribute.String;
+    email: Attribute.String;
+    phone: Attribute.String;
+    hotels: Attribute.Relation<
+      'api::enterprise.enterprise',
+      'oneToMany',
+      'api::hotel.hotel'
+    >;
+    secret_key: Attribute.Text;
+    users: Attribute.Relation<
+      'api::enterprise.enterprise',
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::current-price.current-price',
+      'api::enterprise.enterprise',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::current-price.current-price',
+      'api::enterprise.enterprise',
       'oneToOne',
       'admin::user'
     > &
@@ -785,29 +850,180 @@ export interface ApiCurrentPriceCurrentPrice extends Schema.SingleType {
   };
 }
 
-export interface ApiSelectedDateSelectedDate extends Schema.SingleType {
-  collectionName: 'selected_dates';
+export interface ApiHotelHotel extends Schema.CollectionType {
+  collectionName: 'hotels';
   info: {
-    singularName: 'selected-date';
-    pluralName: 'selected-dates';
-    displayName: 'SelectedDate';
+    singularName: 'hotel';
+    pluralName: 'hotels';
+    displayName: 'Hotel';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    date: Attribute.String;
+    name: Attribute.String;
+    location: Attribute.String;
+    users: Attribute.Relation<
+      'api::hotel.hotel',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    costumers: Attribute.Relation<
+      'api::hotel.hotel',
+      'manyToMany',
+      'api::costumer.costumer'
+    >;
+    enterprise: Attribute.Relation<
+      'api::hotel.hotel',
+      'manyToOne',
+      'api::enterprise.enterprise'
+    >;
+    calendar_dates: Attribute.Relation<
+      'api::hotel.hotel',
+      'oneToMany',
+      'api::calendar-date.calendar-date'
+    >;
+    hotel_rooms: Attribute.Relation<
+      'api::hotel.hotel',
+      'oneToMany',
+      'api::hotel-room.hotel-room'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::selected-date.selected-date',
+      'api::hotel.hotel',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::selected-date.selected-date',
+      'api::hotel.hotel',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiHotelRoomHotelRoom extends Schema.CollectionType {
+  collectionName: 'hotel_rooms';
+  info: {
+    singularName: 'hotel-room';
+    pluralName: 'hotel-rooms';
+    displayName: 'Hotel room';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    costumers: Attribute.Relation<
+      'api::hotel-room.hotel-room',
+      'manyToMany',
+      'api::costumer.costumer'
+    >;
+    hotel: Attribute.Relation<
+      'api::hotel-room.hotel-room',
+      'manyToOne',
+      'api::hotel.hotel'
+    >;
+    calendar_dates: Attribute.Relation<
+      'api::hotel-room.hotel-room',
+      'oneToMany',
+      'api::calendar-date.calendar-date'
+    >;
+    settings: Attribute.Relation<
+      'api::hotel-room.hotel-room',
+      'oneToMany',
+      'api::setting.setting'
+    >;
+    max_count: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::hotel-room.hotel-room',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::hotel-room.hotel-room',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSettingSetting extends Schema.CollectionType {
+  collectionName: 'settings';
+  info: {
+    singularName: 'setting';
+    pluralName: 'settings';
+    displayName: 'Setting';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    key: Attribute.String;
+    component: Attribute.DynamicZone<
+      ['input.checkbox-option', 'input.select-option', 'input.text-input']
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::setting.setting',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::setting.setting',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiTelegramUserTelegramUser extends Schema.CollectionType {
+  collectionName: 'telegram_users';
+  info: {
+    singularName: 'telegram-user';
+    pluralName: 'telegram-users';
+    displayName: 'TelegramUser';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    chat_id: Attribute.String;
+    admin_user: Attribute.Relation<
+      'api::telegram-user.telegram-user',
+      'oneToOne',
+      'admin::user'
+    >;
+    user_jwt: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::telegram-user.telegram-user',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::telegram-user.telegram-user',
       'oneToOne',
       'admin::user'
     > &
@@ -827,14 +1043,17 @@ declare module '@strapi/types' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
+      'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'plugin::i18n.locale': PluginI18NLocale;
       'api::calendar-date.calendar-date': ApiCalendarDateCalendarDate;
       'api::costumer.costumer': ApiCostumerCostumer;
-      'api::current-price.current-price': ApiCurrentPriceCurrentPrice;
-      'api::selected-date.selected-date': ApiSelectedDateSelectedDate;
+      'api::enterprise.enterprise': ApiEnterpriseEnterprise;
+      'api::hotel.hotel': ApiHotelHotel;
+      'api::hotel-room.hotel-room': ApiHotelRoomHotelRoom;
+      'api::setting.setting': ApiSettingSetting;
+      'api::telegram-user.telegram-user': ApiTelegramUserTelegramUser;
     }
   }
 }

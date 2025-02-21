@@ -23,6 +23,30 @@
       "relation": "oneToMany",
       "target": "api::calendar-date.calendar-date",
       "mappedBy": "costumer"
+    },
+    "address": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "costumers"
+    },
+    "hotels": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::hotel.hotel",
+      "inversedBy": "costumers"
+    },
+    "hotel_rooms": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::hotel-room.hotel-room",
+      "mappedBy": "costumers"
     }
   }
 }

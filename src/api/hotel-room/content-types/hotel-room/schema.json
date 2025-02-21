@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "hotel_rooms",
+  "info": {
+    "singularName": "hotel-room",
+    "pluralName": "hotel-rooms",
+    "displayName": "Hotel room",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "costumers": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::costumer.costumer",
+      "inversedBy": "hotel_rooms"
+    },
+    "hotel": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::hotel.hotel",
+      "inversedBy": "hotel_rooms"
+    },
+    "calendar_dates": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::calendar-date.calendar-date",
+      "mappedBy": "hotel_room"
+    },
+    "settings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::setting.setting"
+    },
+    "max_count": {
+      "type": "string"
+    }
+  }
+}
